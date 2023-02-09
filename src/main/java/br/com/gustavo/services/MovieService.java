@@ -1,11 +1,15 @@
 package br.com.gustavo.services;
 
 import br.com.gustavo.controller.MovieController;
+import br.com.gustavo.dto.ActorInputDTO;
 import br.com.gustavo.dto.MovieDTO;
+import br.com.gustavo.dto.MovieInputDTO;
 import br.com.gustavo.exceptions.BusinessException;
 import br.com.gustavo.exceptions.RequiredObjectIsNullException;
 import br.com.gustavo.exceptions.ResourceNotFoundException;
 import br.com.gustavo.mapper.ModelMapper;
+import br.com.gustavo.model.Actor;
+import br.com.gustavo.model.Category;
 import br.com.gustavo.model.Movie;
 import br.com.gustavo.repositories.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +20,8 @@ import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -29,9 +35,10 @@ public class MovieService {
 
     @Autowired
     private MovieRepository repository;
-
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private ActorService actorService;
     @Autowired
     PagedResourcesAssembler<MovieDTO> assembler;
     public PagedModel<EntityModel<MovieDTO>> findAll(Pageable pageable) {
@@ -79,20 +86,50 @@ public class MovieService {
         return dto;
     }
 
-    public MovieDTO save(Movie movie) {
-        if (movie == null) throw new RequiredObjectIsNullException();
+    public MovieDTO preSave(MovieInputDTO movieInput) {
+        if (movieInput == null) throw new RequiredObjectIsNullException();
 
         logger.info("Creating new Movie!");
 
-        Optional<Movie> existingMovie = repository.findByTitle(movie.getTitle());
+        Optional<Movie> existingMovie = repository.findByTitle(movieInput.getTitle());
         existingMovie.ifPresent(em -> {
             throw new BusinessException("Already Exists a movie with this title!");
         });
 
-        categoryService.findById(movie.getCategory().getId()).orElseThrow(() -> new ResourceNotFoundException("No category found for this ID!"));
+        var entity = save(movieInput);
 
-        var dto = ModelMapper.parseObject(repository.save(movie), MovieDTO.class);
+        var dto = ModelMapper.parseObject(entity, MovieDTO.class);
         dto.add(linkTo(methodOn(MovieController.class).findById(dto.getId())).withSelfRel());
         return dto;
+    }
+
+    private Movie save(MovieInputDTO movieInput) {
+        Movie movie = new Movie();
+        movie.setTitle(movieInput.getTitle());
+        movie.setAuthor(movieInput.getAuthor());
+        movie.setSynopsis(movieInput.getSynopsis());
+        movie.setReleaseDate(movieInput.getReleaseDate());
+        movie.setTags(movieInput.getTags());
+
+        List<Actor> actors = populateActor(movieInput, movie);
+        movie.setActors(actors);
+
+        Category category = populateCategory(movieInput, movie);
+        movie.setCategory(category);
+
+        return repository.save(movie);
+    }
+
+    private List<Actor> populateActor(MovieInputDTO movieInput, Movie movie) {
+        List<Actor> actors = new ArrayList<>();
+        for (ActorInputDTO dto : movieInput.getActors()) {
+            Actor actor = actorService.findById(dto.getId());
+            actors.add(actor);
+        }
+        return actors;
+    }
+
+    private Category populateCategory(MovieInputDTO movieInput, Movie movie) {
+        return categoryService.findById(movieInput.getCategory());
     }
 }
