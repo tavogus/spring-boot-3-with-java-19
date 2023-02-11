@@ -41,22 +41,6 @@ public class MovieService {
     private ActorService actorService;
     @Autowired
     PagedResourcesAssembler<MovieDTO> assembler;
-    public PagedModel<EntityModel<MovieDTO>> findAll(Pageable pageable) {
-        logger.info("Finding all movies!");
-
-        var moviesPage = repository.findAll(pageable);
-
-        var moviesDtos = moviesPage.map(p -> ModelMapper.parseObject(p, MovieDTO.class));
-        moviesDtos.map(p -> p.add(linkTo(methodOn(MovieController.class).findById(p.getId())).withSelfRel()));
-
-        Link findAllLink = linkTo(
-                methodOn(MovieController.class)
-                        .findAll(pageable.getPageNumber(),
-                                 pageable.getPageSize(),
-                                "asc")).withSelfRel();
-
-        return assembler.toModel(moviesDtos, findAllLink);
-    }
 
     public PagedModel<EntityModel<MovieDTO>> findByFilter(String filter, Pageable pageable) {
         logger.info("Finding movies by filter!");

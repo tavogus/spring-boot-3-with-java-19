@@ -3,7 +3,6 @@ package br.com.gustavo.services;
 import br.com.gustavo.controller.MovieController;
 import br.com.gustavo.controller.TvShowController;
 import br.com.gustavo.dto.ActorInputDTO;
-import br.com.gustavo.dto.MovieDTO;
 import br.com.gustavo.dto.TvShowDTO;
 import br.com.gustavo.dto.TvShowInputDTO;
 import br.com.gustavo.exceptions.BusinessException;
@@ -47,22 +46,6 @@ public class TvShowService {
     @Autowired
     PagedResourcesAssembler<TvShowDTO> assembler;
 
-    public PagedModel<EntityModel<TvShowDTO>> findAll(Pageable pageable) {
-        logger.info("Finding all tv shows!");
-
-        var tvShowsPage = repository.findAll(pageable);
-
-        var tvShowDtos = tvShowsPage.map(p -> ModelMapper.parseObject(p, TvShowDTO.class));
-        tvShowDtos.map(p -> p.add(linkTo(methodOn(TvShowController.class).findById(p.getId())).withSelfRel()));
-
-        Link findAllLink = linkTo(
-                methodOn(TvShowController.class)
-                        .findAll(pageable.getPageNumber(),
-                                pageable.getPageSize(),
-                                "asc")).withSelfRel();
-
-        return assembler.toModel(tvShowDtos, findAllLink);
-    }
 
     public PagedModel<EntityModel<TvShowDTO>> findByFilter(String filter, Pageable pageable) {
         logger.info("Finding tv shows by filter!");
