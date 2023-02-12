@@ -44,6 +44,8 @@ public class Movie implements Serializable {
     @ElementCollection
     private List<String> tags;
 
+    private String url;
+
     @ManyToMany
     @JoinTable(name = "movie_actor",
             joinColumns = {@JoinColumn(name = "movie_id", referencedColumnName = "id")},
@@ -115,6 +117,14 @@ public class Movie implements Serializable {
 
     public void setTags(List<String> tags) {
         this.tags = tags;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public List<Actor> getActors() {

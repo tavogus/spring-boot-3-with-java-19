@@ -17,6 +17,9 @@
 		<java.version>19</java.version>
 		<modelmapper.version>3.1.1</modelmapper.version>
 		<springdoc.version>2.0.2</springdoc.version>
+		<aws.cloud.version>2.3.1</aws.cloud.version>
+		<aws.autoconfigure.version>2.3.1</aws.autoconfigure.version>
+		<jaxb-api.version>2.3.0</jaxb-api.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -73,9 +76,24 @@
 			<artifactId>jackson-dataformat-yaml</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+			<version>${jaxb-api.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 			<version>${springdoc.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.awspring.cloud</groupId>
+			<artifactId>spring-cloud-aws-context</artifactId>
+			<version>${aws.cloud.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.awspring.cloud</groupId>
+			<artifactId>spring-cloud-aws-autoconfigure</artifactId>
+			<version>${aws.autoconfigure.version}</version>
 		</dependency>
 
 		<dependency>

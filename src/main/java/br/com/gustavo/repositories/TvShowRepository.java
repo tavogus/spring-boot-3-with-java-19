@@ -14,7 +14,8 @@ public interface TvShowRepository extends JpaRepository<TvShow, Long> {
 
     @Query("select t " +
             "from TvShow t " +
+            "join t.actors a " +
             "where " +
-            "(:filter is null or t.title like %:filter% or t.category.name like %:filter%)")
+            "(:filter is null or t.title like %:filter% or t.category.name like %:filter% or a.name like %:filter%)")
     Page<TvShow> findByFilter(@Param("filter") String filter, Pageable page);
 }

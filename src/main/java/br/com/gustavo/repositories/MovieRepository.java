@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface MovieRepository extends JpaRepository<Movie, Long>, PagingAndSortingRepository<Movie, Long> {
@@ -16,7 +15,8 @@ public interface MovieRepository extends JpaRepository<Movie, Long>, PagingAndSo
 
     @Query("select m " +
             "from Movie m " +
+            "join m.actors a " +
             "where " +
-            "(:filter is null or m.title like %:filter% or m.category.name like %:filter%)")
+            "(:filter is null or m.title like %:filter% or m.category.name like %:filter% or a.name like %:filter%)")
     Page<Movie> findByFilter(@Param("filter") String filter, Pageable page);
 }

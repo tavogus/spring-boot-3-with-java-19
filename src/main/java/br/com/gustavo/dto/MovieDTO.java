@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.io.Serializable;
-import java.time.OffsetDateTime;
 import java.util.List;
 
 @JsonPropertyOrder({"id", "title", "categoryName", "author", "releaseDate", "actors", "synopsis", "tags"})
@@ -22,6 +21,8 @@ public class MovieDTO extends RepresentationModel<MovieDTO> implements Serializa
     private String synopsis;
     private Integer releaseDate;
     private List<String> tags;
+
+    private String url;
 
     public MovieDTO(){}
 
@@ -87,5 +88,13 @@ public class MovieDTO extends RepresentationModel<MovieDTO> implements Serializa
 
     public void setTags(List<String> tags) {
         this.tags = tags;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

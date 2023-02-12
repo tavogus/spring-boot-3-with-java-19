@@ -18,6 +18,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping(value = "/api/movie")
@@ -86,5 +87,10 @@ public class MovieController {
     @PostMapping
     public ResponseEntity<MovieDTO> addMovie(@Valid @RequestBody MovieInputDTO movieInput) {
         return ResponseEntity.ok(service.preSave(movieInput));
+    }
+
+    @PostMapping(value = "/upload")
+    public ResponseEntity<MovieDTO> uploadMovie(@RequestParam("file") MultipartFile file, @RequestParam("movieId") Long movieId) {
+        return ResponseEntity.ok(service.uploadMovie(file, movieId));
     }
 }

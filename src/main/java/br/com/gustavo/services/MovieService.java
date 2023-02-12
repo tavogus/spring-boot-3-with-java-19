@@ -19,6 +19,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +40,9 @@ public class MovieService {
     private CategoryService categoryService;
     @Autowired
     private ActorService actorService;
+
+    @Autowired
+    private S3Service s3Service;
     @Autowired
     PagedResourcesAssembler<MovieDTO> assembler;
 
@@ -64,9 +68,21 @@ public class MovieService {
     public MovieDTO findById(Long id) {
         logger.info("Finding one movie!");
 
-        var entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
+        var entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No movie found for this ID!"));
         var dto = ModelMapper.parseObject(entity, MovieDTO.class);
         dto.add(linkTo(methodOn(MovieController.class).findById(id)).withSelfRel());
+        return dto;
+    }
+
+    public MovieDTO uploadMovie(MultipartFile file, Long movieId) {
+        Movie movie = repository.findById(movieId).orElseThrow(() -> new ResourceNotFoundException("No movie found for this ID!"));
+
+        String url = s3Service.uploadFile(file);
+        movie.setUrl(url);
+
+        var entity = repository.save(movie);
+        var dto = ModelMapper.parseObject(entity, MovieDTO.class);
+        dto.add(linkTo(methodOn(MovieController.class).findById(dto.getId())).withSelfRel());
         return dto;
     }
 
