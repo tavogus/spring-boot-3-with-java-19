@@ -41,6 +41,8 @@ public class TvShow implements Serializable {
     @ElementCollection
     private List<String> tags;
 
+    private String url;
+
     @ManyToMany
     @JoinTable(name = "tvshow_actor",
             joinColumns = {@JoinColumn(name = "tvshow_id", referencedColumnName = "id")},
@@ -128,5 +130,13 @@ public class TvShow implements Serializable {
 
     public void setActors(List<Actor> actors) {
         this.actors = actors;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

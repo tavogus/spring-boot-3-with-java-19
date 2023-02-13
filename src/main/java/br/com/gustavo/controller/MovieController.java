@@ -89,6 +89,18 @@ public class MovieController {
         return ResponseEntity.ok(service.preSave(movieInput));
     }
 
+    @Operation(summary = "Adds a file url to movie",
+            description = "Adds a file to a Movie by passing in a file!",
+            tags = {"Movie"},
+            responses = {
+                    @ApiResponse(description = "Success", responseCode = "200",
+                            content = @Content(schema = @Schema(implementation = MovieDTO.class))
+                    ),
+                    @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
+                    @ApiResponse(description = "Unauthorized", responseCode = "401", content = @Content),
+                    @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
+            }
+    )
     @PostMapping(value = "/upload")
     public ResponseEntity<MovieDTO> uploadMovie(@RequestParam("file") MultipartFile file, @RequestParam("movieId") Long movieId) {
         return ResponseEntity.ok(service.uploadMovie(file, movieId));

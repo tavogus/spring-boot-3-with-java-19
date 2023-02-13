@@ -40,7 +40,6 @@ public class MovieService {
     private CategoryService categoryService;
     @Autowired
     private ActorService actorService;
-
     @Autowired
     private S3Service s3Service;
     @Autowired

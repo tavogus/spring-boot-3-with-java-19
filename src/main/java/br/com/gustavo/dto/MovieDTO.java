@@ -7,7 +7,7 @@ import org.springframework.hateoas.RepresentationModel;
 import java.io.Serializable;
 import java.util.List;
 
-@JsonPropertyOrder({"id", "title", "categoryName", "author", "releaseDate", "actors", "synopsis", "tags"})
+@JsonPropertyOrder({"id", "title", "categoryName", "author", "releaseDate", "actors", "synopsis", "tags", "url"})
 public class MovieDTO extends RepresentationModel<MovieDTO> implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -21,7 +21,6 @@ public class MovieDTO extends RepresentationModel<MovieDTO> implements Serializa
     private String synopsis;
     private Integer releaseDate;
     private List<String> tags;
-
     private String url;
 
     public MovieDTO(){}

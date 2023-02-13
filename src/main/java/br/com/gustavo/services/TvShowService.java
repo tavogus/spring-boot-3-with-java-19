@@ -20,6 +20,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,16 +34,14 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class TvShowService {
 
     private Logger logger = Logger.getLogger(TvShowService.class.getName());
-    
     @Autowired
     private TvShowRepository repository;
-
     @Autowired
     private CategoryService categoryService;
-
     @Autowired
     private ActorService actorService;
-
+    @Autowired
+    private S3Service s3Service;
     @Autowired
     PagedResourcesAssembler<TvShowDTO> assembler;
 
@@ -72,6 +71,18 @@ public class TvShowService {
         var entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
         var dto = ModelMapper.parseObject(entity, TvShowDTO.class);
         dto.add(linkTo(methodOn(MovieController.class).findById(id)).withSelfRel());
+        return dto;
+    }
+
+    public TvShowDTO uploadTvShow(MultipartFile file, Long tvShowId) {
+        TvShow tvShow = repository.findById(tvShowId).orElseThrow(() -> new ResourceNotFoundException("No Tv Show found for this ID!"));
+
+        String url = s3Service.uploadFile(file);
+        tvShow.setUrl(url);
+
+        var entity = repository.save(tvShow);
+        var dto = ModelMapper.parseObject(entity, TvShowDTO.class);
+        dto.add(linkTo(methodOn(TvShowController.class).findById(dto.getId())).withSelfRel());
         return dto;
     }
 

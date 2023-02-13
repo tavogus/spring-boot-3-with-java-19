@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.time.OffsetDateTime;
 import java.util.List;
 
-@JsonPropertyOrder({"id", "title", "seasons", "categoryName", "author", "releaseDate", "actors", "synopsis", "tags"})
+@JsonPropertyOrder({"id", "title", "seasons", "categoryName", "author", "releaseDate", "actors", "synopsis", "tags", "url"})
 public class TvShowDTO extends RepresentationModel<TvShowDTO> implements Serializable  {
     private static final long serialVersionUID = 1L;
 
@@ -22,6 +22,7 @@ public class TvShowDTO extends RepresentationModel<TvShowDTO> implements Seriali
     private Integer seasons;
     private Integer releaseDate;
     private List<String> tags;
+    private String url;
 
     public TvShowDTO(){}
 
@@ -103,5 +104,13 @@ public class TvShowDTO extends RepresentationModel<TvShowDTO> implements Seriali
 
     public void setTags(List<String> tags) {
         this.tags = tags;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }
