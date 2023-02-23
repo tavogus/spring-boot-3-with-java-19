@@ -15,7 +15,7 @@ import java.util.UUID;
 @Service
 public class S3Service implements FileService{
 
-    public static final String BUCKET_NAME = "movies-and-tvshows";
+    public static final String BUCKET_NAME = "movies-and-tvshows-storage";
 
     private final AmazonS3Client awsS3;
 

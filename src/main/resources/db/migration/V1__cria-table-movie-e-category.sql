@@ -1,7 +1,7 @@
 create table category
 (
     id   bigint      not null auto_increment,
-    name varchar(50) not null,
+    name varchar(100) not null,
     primary key (id)
 );
 
@@ -33,7 +33,7 @@ create table tv_show
 create table actor
 (
     id   bigint      not null auto_increment,
-    name varchar(60) not null,
+    name varchar(100) not null,
     primary key (id)
 );
 
