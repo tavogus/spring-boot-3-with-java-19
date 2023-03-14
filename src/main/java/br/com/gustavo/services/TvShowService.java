@@ -2,7 +2,6 @@ package br.com.gustavo.services;
 
 import br.com.gustavo.controller.MovieController;
 import br.com.gustavo.controller.TvShowController;
-import br.com.gustavo.dto.ActorInputDTO;
 import br.com.gustavo.dto.TvShowDTO;
 import br.com.gustavo.dto.TvShowInputDTO;
 import br.com.gustavo.exceptions.BusinessException;
@@ -112,25 +111,25 @@ public class TvShowService {
         tvShow.setSeasons(tvShowInput.getSeasons());
         tvShow.setTags(tvShowInput.getTags());
 
-        List<Actor> actors = populateActor(tvShowInput, tvShow);
+        List<Actor> actors = populateActor(tvShowInput);
         tvShow.setActors(actors);
 
-        Category category = populateCategory(tvShowInput, tvShow);
+        Category category = populateCategory(tvShowInput);
         tvShow.setCategory(category);
 
         return repository.save(tvShow);
     }
 
-    private List<Actor> populateActor(TvShowInputDTO tvShowInput, TvShow tvShow) {
+    private List<Actor> populateActor(TvShowInputDTO tvShowInput) {
         List<Actor> actors = new ArrayList<>();
-        for (ActorInputDTO dto : tvShowInput.getActors()) {
+        tvShowInput.getActors().forEach(dto -> {
             Actor actor = actorService.findById(dto.getId());
             actors.add(actor);
-        }
+        });
         return actors;
     }
 
-    private Category populateCategory(TvShowInputDTO tvShowInput, TvShow tvShow) {
+    private Category populateCategory(TvShowInputDTO tvShowInput) {
         return categoryService.findById(tvShowInput.getCategory());
     }
 }

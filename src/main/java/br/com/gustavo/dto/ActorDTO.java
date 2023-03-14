@@ -1,6 +1,5 @@
 package br.com.gustavo.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.io.Serializable;

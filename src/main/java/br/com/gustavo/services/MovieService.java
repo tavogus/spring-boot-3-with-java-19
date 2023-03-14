@@ -1,7 +1,6 @@
 package br.com.gustavo.services;
 
 import br.com.gustavo.controller.MovieController;
-import br.com.gustavo.dto.ActorInputDTO;
 import br.com.gustavo.dto.MovieDTO;
 import br.com.gustavo.dto.MovieInputDTO;
 import br.com.gustavo.exceptions.BusinessException;
@@ -110,25 +109,25 @@ public class MovieService {
         movie.setReleaseDate(movieInput.getReleaseDate());
         movie.setTags(movieInput.getTags());
 
-        List<Actor> actors = populateActor(movieInput, movie);
+        List<Actor> actors = populateActor(movieInput);
         movie.setActors(actors);
 
-        Category category = populateCategory(movieInput, movie);
+        Category category = populateCategory(movieInput);
         movie.setCategory(category);
 
         return repository.save(movie);
     }
 
-    private List<Actor> populateActor(MovieInputDTO movieInput, Movie movie) {
+    private List<Actor> populateActor(MovieInputDTO movieInput) {
         List<Actor> actors = new ArrayList<>();
-        for (ActorInputDTO dto : movieInput.getActors()) {
+        movieInput.getActors().forEach(dto -> {
             Actor actor = actorService.findById(dto.getId());
             actors.add(actor);
-        }
+        });
         return actors;
     }
 
-    private Category populateCategory(MovieInputDTO movieInput, Movie movie) {
+    private Category populateCategory(MovieInputDTO movieInput) {
         return categoryService.findById(movieInput.getCategory());
     }
 }
