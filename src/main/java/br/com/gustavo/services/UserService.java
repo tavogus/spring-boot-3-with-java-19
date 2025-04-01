@@ -1,7 +1,6 @@
 package br.com.gustavo.services;
 
 import br.com.gustavo.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -13,8 +12,7 @@ import java.util.logging.Logger;
 public class UserService implements UserDetailsService {
     private Logger logger = Logger.getLogger(UserService.class.getName());
 
-    @Autowired
-    private UserRepository repository;
+    private final UserRepository repository;
 
     public UserService(UserRepository repository) {
         this.repository = repository;

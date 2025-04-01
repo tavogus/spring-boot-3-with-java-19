@@ -11,7 +11,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -25,8 +24,11 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping(value = "/api/tvshow")
 public class TvShowController {
 
-    @Autowired
-    private TvShowService service;
+    private final TvShowService service;
+
+    public TvShowController(TvShowService service) {
+        this.service = service;
+    }
 
     @Operation(summary = "Finds all Tv Shows by filter", description = "Finds all Tv Shows by filter",
             tags = {"TvShow"},

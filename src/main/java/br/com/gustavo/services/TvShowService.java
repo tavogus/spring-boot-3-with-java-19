@@ -12,7 +12,6 @@ import br.com.gustavo.model.Actor;
 import br.com.gustavo.model.Category;
 import br.com.gustavo.model.TvShow;
 import br.com.gustavo.repositories.TvShowRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
@@ -33,16 +32,20 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class TvShowService {
 
     private Logger logger = Logger.getLogger(TvShowService.class.getName());
-    @Autowired
-    private TvShowRepository repository;
-    @Autowired
-    private CategoryService categoryService;
-    @Autowired
-    private ActorService actorService;
-    @Autowired
-    private S3Service s3Service;
-    @Autowired
-    PagedResourcesAssembler<TvShowDTO> assembler;
+
+    private final TvShowRepository repository;
+    private final CategoryService categoryService;
+    private final ActorService actorService;
+    private final S3Service s3Service;
+    final PagedResourcesAssembler<TvShowDTO> assembler;
+
+    public TvShowService(TvShowRepository repository, CategoryService categoryService, ActorService actorService, S3Service s3Service, PagedResourcesAssembler<TvShowDTO> assembler) {
+        this.repository = repository;
+        this.categoryService = categoryService;
+        this.actorService = actorService;
+        this.s3Service = s3Service;
+        this.assembler = assembler;
+    }
 
 
     public PagedModel<EntityModel<TvShowDTO>> findByFilter(String filter, Pageable pageable) {

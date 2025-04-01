@@ -10,7 +10,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -24,8 +23,11 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping(value = "/api/movie")
 public class MovieController {
 
-    @Autowired
-    private MovieService service;
+    private final MovieService service;
+
+    public MovieController(MovieService service) {
+        this.service = service;
+    }
 
     @Operation(summary = "Finds all Movies by filter", description = "Finds all Movies by filter",
             tags = {"Movie"},

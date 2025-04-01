@@ -11,7 +11,6 @@ import br.com.gustavo.model.Actor;
 import br.com.gustavo.model.Category;
 import br.com.gustavo.model.Movie;
 import br.com.gustavo.repositories.MovieRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
@@ -33,16 +32,19 @@ public class MovieService {
 
     private Logger logger = Logger.getLogger(MovieService.class.getName());
 
-    @Autowired
-    private MovieRepository repository;
-    @Autowired
-    private CategoryService categoryService;
-    @Autowired
-    private ActorService actorService;
-    @Autowired
-    private S3Service s3Service;
-    @Autowired
-    PagedResourcesAssembler<MovieDTO> assembler;
+    private final MovieRepository repository;
+    private final CategoryService categoryService;
+    private final ActorService actorService;
+    private final S3Service s3Service;
+    final PagedResourcesAssembler<MovieDTO> assembler;
+
+    public MovieService(MovieRepository repository, CategoryService categoryService, ActorService actorService, S3Service s3Service, PagedResourcesAssembler<MovieDTO> assembler) {
+        this.repository = repository;
+        this.categoryService = categoryService;
+        this.actorService = actorService;
+        this.s3Service = s3Service;
+        this.assembler = assembler;
+    }
 
     public PagedModel<EntityModel<MovieDTO>> findByFilter(String filter, Pageable pageable) {
         logger.info("Finding movies by filter!");
@@ -55,9 +57,9 @@ public class MovieService {
         Link findByFilterLink = linkTo(
                 methodOn(MovieController.class)
                         .findByFilter(pageable.getPageNumber(),
-                                      pageable.getPageSize(),
-                                      "asc",
-                                      filter)
+                                pageable.getPageSize(),
+                                "asc",
+                                filter)
         ).withSelfRel();
 
         return assembler.toModel(moviesDtos, findByFilterLink);

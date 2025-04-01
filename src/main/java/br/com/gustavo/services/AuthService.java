@@ -4,7 +4,6 @@ import br.com.gustavo.dto.security.AccountCredentialsDTO;
 import br.com.gustavo.dto.security.TokenDTO;
 import br.com.gustavo.repositories.UserRepository;
 import br.com.gustavo.security.jwt.JwtTokenProvider;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -15,14 +14,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthService {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
+    private final JwtTokenProvider tokenProvider;
+    private final UserRepository repository;
 
-    @Autowired
-    private JwtTokenProvider tokenProvider;
-
-    @Autowired
-    private UserRepository repository;
+    public AuthService(AuthenticationManager authenticationManager, JwtTokenProvider tokenProvider, UserRepository repository) {
+        this.authenticationManager = authenticationManager;
+        this.tokenProvider = tokenProvider;
+        this.repository = repository;
+    }
 
     @SuppressWarnings("rawtypes")
     public ResponseEntity signin(AccountCredentialsDTO data) {

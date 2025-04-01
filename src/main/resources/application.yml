@@ -1,7 +1,5 @@
-server:
-  port: 80
 cors:
-  originPatterns: http://localhost:3000,http://localhost:80800
+  originPatterns: http://localhost:3000,http://localhost:8080
 security:
   jwt:
     token:
@@ -10,15 +8,15 @@ security:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://resources-api.cykf6rrh7h0s.us-east-1.rds.amazonaws.com:3306/resources_api?useTimezone=true&serverTimezone=UTC
-    username: docker
+    url: jdbc:mysql://localhost/movies-api?createDatabaseIfNotExist=true&serverTimezone=UTC
+    username: root
     password: admin123
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect
+        dialect: org.hibernate.dialect.MySQLDialect
     show-sql: false
   servlet:
     multipart:
